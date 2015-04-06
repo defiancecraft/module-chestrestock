@@ -1,0 +1,6 @@
+name: ChestRestock
+version: 1.0.0
+main: com.defiancecraft.modules.chestrestock.ChestRestock
+commands:
+  restockchest:
+  restock:
