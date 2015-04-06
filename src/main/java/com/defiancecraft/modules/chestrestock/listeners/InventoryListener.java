@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import com.defiancecraft.modules.chestrestock.ChestRestock;
@@ -84,15 +83,12 @@ public class InventoryListener implements Listener {
 		}
 		
 		// If it's a right-click, or if it's a shift-click and player has no room
+		// or if it's a double click (will stack items automatically, must be prevented)
 		if (e.isRightClick()
 				|| (e.isShiftClick()
-						&& !playerHasRoom((Player)e.getWhoClicked(), e.getCurrentItem()))
+						&& !playerHasRoom((Player)e.getWhoClicked(), e.getCurrentItem())
+				|| e.getClick().equals(ClickType.DOUBLE_CLICK))
 			) {
-			e.setCancelled(true);
-			return;
-		}
-		
-		if (e.getClick().equals(ClickType.DOUBLE_CLICK)) {
 			e.setCancelled(true);
 			return;
 		}
