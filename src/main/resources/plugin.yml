@@ -4,3 +4,4 @@ main: com.defiancecraft.modules.chestrestock.ChestRestock
 commands:
   restockchest:
   restock:
+  redeem:

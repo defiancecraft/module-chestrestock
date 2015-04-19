@@ -5,12 +5,14 @@ import java.time.Instant;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.defiancecraft.core.DefianceCore;
 import com.defiancecraft.core.command.CommandRegistry;
 import com.defiancecraft.core.database.collections.Collection;
 import com.defiancecraft.core.modules.Module;
 import com.defiancecraft.core.util.FileUtils;
 import com.defiancecraft.core.util.JsonConfig;
 import com.defiancecraft.modules.chestrestock.commands.RestockCommands;
+import com.defiancecraft.modules.chestrestock.commands.TokenCommands;
 import com.defiancecraft.modules.chestrestock.config.InventoriesConfig;
 import com.defiancecraft.modules.chestrestock.config.MainConfig;
 import com.defiancecraft.modules.chestrestock.listeners.InventoryListener;
@@ -40,6 +42,16 @@ public class ChestRestock extends JavaPlugin implements Module {
     	CommandRegistry.registerPlayerSubCommand("restock", "setup", "defiancecraft.restock.setup", RestockCommands::setup);
     	CommandRegistry.registerPlayerSubCommand("restock", "status", "defiancecraft.restock.status", RestockCommands::status);
     	CommandRegistry.registerPlayerSubCommand("restock", "create", "defiancecraft.restock.create", RestockCommands::create);
+    	
+    	CommandRegistry.registerPlayerCommand(this, "redeem", "defiancecraft.restock.redeem", TokenCommands::redeem);
+    	CommandRegistry.registerUniversalSubCommand("restock", "reload", "defiancecraft.restock.reload", (p, a) -> {
+    		
+    		DefianceCore.reloadModuleConfig();
+    		ChestRestock.mainConfig = getConfig(MainConfig.class);
+    		
+    		return true;
+    		
+    	});
     	
     	// Load the restock cache
     	RestockCache.reload();
