@@ -16,8 +16,12 @@ public class MainConfig {
 	public String tokenName = "Right click to get tokens!";
 	public List<String> tokenLore = Arrays.asList("I am worth", "1 token!");
 	public String redeemMsg = "&aYou redeemed: 1 token!";
+	public String redeemMultipleMsg = "&aYou redeemed {amount}T!";
 	
 	public List<String> whitelistWorlds = Arrays.asList("world");
 	public String whitelistMsg = "Feck offfff";
+	
+	public boolean tokenRedeemCommandEnabled = true;
+	public boolean tokenRedeemClickEnabled = true;
 	
 }

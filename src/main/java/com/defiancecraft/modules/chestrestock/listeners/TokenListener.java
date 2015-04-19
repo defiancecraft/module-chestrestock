@@ -18,7 +18,8 @@ public class TokenListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		
 		// Return if cancelled, no item, not right-click, or not a token
-		if ((!e.getAction().equals(Action.RIGHT_CLICK_AIR) && e.isCancelled())
+		if (e.isCancelled()
+				|| !ChestRestock.getMainConfig().tokenRedeemClickEnabled
 				|| (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)
 						&& !e.getAction().equals(Action.RIGHT_CLICK_AIR))
 				|| e.getItem() == null
@@ -26,6 +27,8 @@ public class TokenListener implements Listener {
 				|| e.getItem().getDurability() != ChestRestock.getMainConfig().tokenDamage
 			)
 			return;
+		
+		e.setCancelled(true);
 		
 		final String name = e.getPlayer().getName();
 		
@@ -39,6 +42,7 @@ public class TokenListener implements Listener {
 		e.getPlayer().setItemInHand(inHand);
 		
 		e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', ChestRestock.getMainConfig().redeemMsg));
+		
 		
 	}
 	
