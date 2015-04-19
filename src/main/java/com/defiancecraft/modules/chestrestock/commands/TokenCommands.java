@@ -17,6 +17,9 @@ public class TokenCommands {
 		if (!(sender instanceof Player))
 			return false;
 		
+		if (!ChestRestock.getMainConfig().tokenRedeemCommandEnabled)
+			return true;
+		
 		Player p = (Player) sender;
 		ItemStack[] items = p.getInventory().getContents();
 		int amount = 0;
