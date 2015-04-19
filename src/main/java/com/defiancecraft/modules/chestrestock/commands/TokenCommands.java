@@ -48,7 +48,7 @@ public class TokenCommands {
 		p.getInventory().setContents(items);
 		p.updateInventory();
 		
-		p.sendMessage(ChatColor.translateAlternateColorCodes('&', ChestRestock.getMainConfig().redeemMultipleMsg));
+		p.sendMessage(ChatColor.translateAlternateColorCodes('&', ChestRestock.getMainConfig().redeemMultipleMsg.replace("{amount}", amount + "")));
 		
 		return true;
 				
