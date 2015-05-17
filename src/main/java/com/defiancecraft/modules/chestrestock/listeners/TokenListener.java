@@ -14,6 +14,7 @@ import com.defiancecraft.modules.chestrestock.ChestRestock;
 
 public class TokenListener implements Listener {
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		
@@ -41,6 +42,7 @@ public class TokenListener implements Listener {
 		inHand.setAmount(inHand.getAmount() - 1);
 		e.getPlayer().setItemInHand(inHand);
 		
+		e.getPlayer().updateInventory();
 		e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', ChestRestock.getMainConfig().redeemMsg));
 		
 		
