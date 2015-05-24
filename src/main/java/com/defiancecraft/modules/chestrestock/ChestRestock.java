@@ -3,12 +3,9 @@ package com.defiancecraft.modules.chestrestock;
 import java.time.Duration;
 import java.time.Instant;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.defiancecraft.core.DefianceCore;
 import com.defiancecraft.core.command.CommandRegistry;
 import com.defiancecraft.core.database.collections.Collection;
-import com.defiancecraft.core.modules.Module;
+import com.defiancecraft.core.modules.impl.JavaModule;
 import com.defiancecraft.core.util.FileUtils;
 import com.defiancecraft.core.util.JsonConfig;
 import com.defiancecraft.modules.chestrestock.commands.RestockCommands;
@@ -20,7 +17,7 @@ import com.defiancecraft.modules.chestrestock.listeners.TokenListener;
 import com.defiancecraft.modules.chestrestock.tasks.RestockTask;
 import com.defiancecraft.modules.chestrestock.util.RestockCache;
 
-public class ChestRestock extends JavaPlugin implements Module {
+public class ChestRestock extends JavaModule {
 
 	private static InventoriesConfig inventoriesConfig;
 	private static MainConfig mainConfig;
@@ -46,7 +43,6 @@ public class ChestRestock extends JavaPlugin implements Module {
     	CommandRegistry.registerPlayerCommand(this, "redeem", "defiancecraft.restock.redeem", TokenCommands::redeem);
     	CommandRegistry.registerUniversalSubCommand("restock", "reload", "defiancecraft.restock.reload", (p, a) -> {
     		
-    		DefianceCore.reloadModuleConfig();
     		ChestRestock.mainConfig = getConfig(MainConfig.class);
     		
     		return true;
