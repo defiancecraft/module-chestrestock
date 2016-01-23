@@ -1,5 +1,8 @@
 package com.defiancecraft.modules.chestrestock.listeners;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,11 +17,15 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.defiancecraft.modules.chestrestock.ChestRestock;
 import com.defiancecraft.modules.chestrestock.inventory.RestockingInventoryHolder;
 import com.defiancecraft.modules.chestrestock.inventory.RestockingItemStack;
+import com.defiancecraft.modules.chestrestock.tasks.RestockTask;
 import com.defiancecraft.modules.chestrestock.util.RestockCache;
+import com.defiancecraft.modules.chestrestock.util.RestockInProgressException;
 
 public class InventoryListener implements Listener {
 
@@ -34,8 +41,12 @@ public class InventoryListener implements Listener {
 		e.setCancelled(true);
 		
 		// Open restock inventory
-		RestockingInventoryHolder holder = new RestockingInventoryHolder(e.getPlayer());
-		e.getPlayer().openInventory(holder.getInventory());
+		try {
+			RestockingInventoryHolder holder = new RestockingInventoryHolder(e.getPlayer());
+			e.getPlayer().openInventory(holder.getInventory());
+		} catch (RestockInProgressException ex) {
+			e.getPlayer().sendMessage(ChatColor.RED + "Chest restock in progress");
+		}
 		
 	}
 	
@@ -64,6 +75,27 @@ public class InventoryListener implements Listener {
 			return;
 		
 		RestockingInventoryHolder holder = (RestockingInventoryHolder) e.getInventory().getHolder();
+		
+		// If the chest restocked during this time or should have restocked,
+		// stop them from taking any items - timing bug.
+		if (!holder.getLastRestock().equals(RestockTask.getLastRestock())
+				|| Duration.between(Instant.now(), RestockTask.getNextRestock()).isNegative()) {
+			
+			e.setCancelled(true);
+			e.getWhoClicked().sendMessage(ChatColor.RED + "Chest restock is in progress");
+			
+			// Close their inventory (although it should have been closed by RestockTask)
+			new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+					e.getWhoClicked().closeInventory();
+				}
+				
+			}.runTask(JavaPlugin.getPlugin(ChestRestock.class));
+			
+			return;
+		}
 		
 		// If they are swapping an item, placing one in, or
 		// shift-clicking one in, deny it!

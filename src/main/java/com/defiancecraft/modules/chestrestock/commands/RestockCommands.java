@@ -20,6 +20,7 @@ import com.defiancecraft.modules.chestrestock.config.InventoriesConfig.Inventory
 import com.defiancecraft.modules.chestrestock.config.InventoriesConfig.InventoryItem;
 import com.defiancecraft.modules.chestrestock.inventory.RestockingInventoryHolder;
 import com.defiancecraft.modules.chestrestock.tasks.RestockTask;
+import com.defiancecraft.modules.chestrestock.util.RestockInProgressException;
 
 public class RestockCommands {
 
@@ -56,8 +57,12 @@ public class RestockCommands {
 				return true;
 			}
 			
-			RestockingInventoryHolder holder = new RestockingInventoryHolder(p);
-			p.openInventory(holder.getInventory());
+			try {
+				RestockingInventoryHolder holder = new RestockingInventoryHolder(p);
+				p.openInventory(holder.getInventory());
+			} catch (RestockInProgressException ex) {
+				p.sendMessage(ChatColor.RED + "Chest restock in progress");
+			}
 			
 		}
 		
