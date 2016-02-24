@@ -31,7 +31,7 @@ public class TokenCommands {
 				continue;
 			
 			// Count tokens			
-			if (items[i].getType().equals(Material.DOUBLE_PLANT) && items[i].getDurability() == 0) {
+			if (items[i].getType().equals(Material.getMaterial(ChestRestock.getMainConfig().tokenType)) && items[i].getDurability() == 0) {
 				amount += items[i].getAmount();
 				items[i] = null;
 			}
